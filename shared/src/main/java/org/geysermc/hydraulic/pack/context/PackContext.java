@@ -4,9 +4,7 @@ import com.google.common.collect.Lists;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.geysermc.hydraulic.HydraulicImpl;
 import org.geysermc.hydraulic.pack.PackModule;
 import org.geysermc.hydraulic.platform.mod.ModInfo;
@@ -86,7 +84,7 @@ public class PackContext<T extends PackModule<T>> {
     @NotNull
     @SuppressWarnings("RedundantCast")
     public <V> List<V> registryValues(@NotNull DefaultedRegistry<? extends V> registry) {
-        final List<ResourceLocation> locations;
+        final List<Identifier> locations;
         if (registry == BuiltInRegistries.BLOCK) {
             locations = hydraulic.getPackManager()
                 .getModsToBlocks()

@@ -3,12 +3,11 @@ package org.geysermc.hydraulic.util;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import org.geysermc.geyser.api.util.Identifier;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class HydraulicKey implements Identifier, Key {
+public class HydraulicKey implements org.geysermc.geyser.api.util.Identifier, Key {
     private String namespace;
     private String path;
 
@@ -17,7 +16,7 @@ public class HydraulicKey implements Identifier, Key {
         this.path = path;
     }
 
-    private HydraulicKey(Identifier id) {
+    private HydraulicKey(org.geysermc.geyser.api.util.Identifier id) {
         this.namespace = id.namespace();
         this.path = id.path();
     }
@@ -27,12 +26,12 @@ public class HydraulicKey implements Identifier, Key {
         this.path = key.value();
     }
 
-    private HydraulicKey(ResourceLocation location) {
+    private HydraulicKey(Identifier location) {
         this.namespace = location.getNamespace();
         this.path = location.getPath();
     }
 
-    public static HydraulicKey of(@Nullable Identifier id) {
+    public static HydraulicKey of(@Nullable org.geysermc.geyser.api.util.Identifier id) {
         if (id == null) return null;
         return new HydraulicKey(id);
     }
@@ -42,14 +41,14 @@ public class HydraulicKey implements Identifier, Key {
         return new HydraulicKey(key);
     }
 
-    public static HydraulicKey of(@Nullable ResourceLocation location) {
+    public static HydraulicKey of(@Nullable Identifier location) {
         if (location == null) return null;
         return new HydraulicKey(location);
     }
 
     public static HydraulicKey of(@Nullable ResourceKey<?> key) {
         if (key == null) return null;
-        return of(key.location());
+        return of(key.identifier());
     }
 
     @Override // Adventure
@@ -79,8 +78,8 @@ public class HydraulicKey implements Identifier, Key {
         return this.path;
     }
 
-    public ResourceLocation location() {
-        return ResourceLocation.fromNamespaceAndPath(this.namespace, this.path);
+    public Identifier identifier() {
+        return Identifier.fromNamespaceAndPath(this.namespace, this.path);
     }
 
     public void namespace(String namespace) {
@@ -97,14 +96,14 @@ public class HydraulicKey implements Identifier, Key {
         if (other == this) return true;
         else if (other instanceof HydraulicKey key) {
             return key.namespace.equals(this.namespace) && key.path.equals(this.path);
-        } else if (other instanceof Identifier id) {
+        } else if (other instanceof org.geysermc.geyser.api.util.Identifier id) {
             return id.namespace().equals(this.namespace) && id.path().equals(this.path);
         } else if (other instanceof Key key) {
             return key.namespace().equals(this.namespace) && key.value().equals(this.path);
-        } else if (other instanceof ResourceLocation location) {
+        } else if (other instanceof Identifier location) {
             return location.getNamespace().equals(this.namespace) && location.getPath().equals(this.path);
         } else if (other instanceof ResourceKey<?> key) {
-            ResourceLocation location = key.location();
+            Identifier location = key.identifier();
             return location.getNamespace().equals(this.namespace) && location.getPath().equals(this.path);
         }
 

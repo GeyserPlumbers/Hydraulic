@@ -8,6 +8,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.level.block.Block;
 import org.geysermc.geyser.api.item.custom.v2.CustomItemBedrockOptions;
@@ -159,9 +160,9 @@ public class ComponentConverter {
         addComponentConversion(DataComponents.ATTRIBUTE_MODIFIERS, (component, map, definition, options) -> {
             net.minecraft.world.item.equipment.Equippable equippable = map.get(DataComponents.EQUIPPABLE); // only one stinky inline import. thanks "protectionValue" :pensive:
             if (equippable != null)
-                options.protectionValue((int) component.compute(0, equippable.slot()));
+                options.protectionValue((int) component.compute(Attributes.ARMOR, 0, equippable.slot()));
 
-            definition.component(GeyserDataComponent.ATTACK_DAMAGE, Math.max(0, (int) component.compute(0, EquipmentSlot.MAINHAND)));
+            definition.component(GeyserDataComponent.ATTACK_DAMAGE, Math.max(0, (int) component.compute(Attributes.ATTACK_DAMAGE, 0, EquipmentSlot.MAINHAND)));
         });
     }
 
@@ -172,7 +173,7 @@ public class ComponentConverter {
                         holders -> Holders.of(
                                 holders.stream()
                                         .map(holder -> (Identifier) HydraulicKey.of(
-                                                holder.unwrapKey().map(ResourceKey::location)
+                                                holder.unwrapKey().map(ResourceKey::identifier)
                                                         .orElseThrow()
                                         ))
                                         .toList()

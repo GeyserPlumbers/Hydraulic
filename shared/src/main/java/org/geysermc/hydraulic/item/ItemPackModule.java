@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -15,7 +15,6 @@ import org.geysermc.geyser.api.item.custom.v2.NonVanillaCustomItemDefinition;
 import org.geysermc.geyser.api.item.custom.v2.component.geyser.BlockPlacer;
 import org.geysermc.geyser.api.item.custom.v2.component.geyser.Chargeable;
 import org.geysermc.geyser.api.item.custom.v2.component.geyser.GeyserDataComponent;
-import org.geysermc.geyser.api.util.Identifier;
 import org.geysermc.hydraulic.pack.PackLogListener;
 import org.geysermc.hydraulic.pack.PackModule;
 import org.geysermc.hydraulic.pack.TexturePackModule;
@@ -37,8 +36,8 @@ import java.util.*;
 
 @AutoService(PackModule.class)
 public class ItemPackModule extends TexturePackModule<ItemPackModule> {
-    private final List<ResourceLocation> itemsWith2dIcon = new ArrayList<>();
-    private final List<ResourceLocation> handheldItems = new ArrayList<>();
+    private final List<Identifier> itemsWith2dIcon = new ArrayList<>();
+    private final List<Identifier> handheldItems = new ArrayList<>();
     private final Map<String, String> itemBuiltinTexture = new HashMap<>();
 
     public ItemPackModule() {
@@ -48,7 +47,7 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
         this.postProcess(this::postProcess);
     }
 
-    private void handleModel(@NotNull PackPreProcessContext<ItemPackModule> context, ItemModel itemModel, ResourceLocation itemLocation) {
+    private void handleModel(@NotNull PackPreProcessContext<ItemPackModule> context, ItemModel itemModel, Identifier itemLocation) {
         if (itemModel instanceof ReferenceItemModel referenceModel) {
             Key modelKey = referenceModel.model();
 
@@ -81,7 +80,7 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
 
     private void preProcess(@NotNull PackPreProcessContext<ItemPackModule> context) {
         for (team.unnamed.creative.item.Item item : context.assets(ResourcePack::items)) {
-            ResourceLocation itemLocation = HydraulicKey.of(item.key()).location();
+            Identifier itemLocation = HydraulicKey.of(item.key()).identifier();
             handleModel(context, item.model(), itemLocation);
         }
 
@@ -104,7 +103,7 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
         List<Item> items = context.registryValues(BuiltInRegistries.ITEM);
         PackLogListener packLogListener = new PackLogListener(context.logger());
         for (Item item : items) {
-            ResourceLocation itemLocation = BuiltInRegistries.ITEM.getKey(item);
+            Identifier itemLocation = BuiltInRegistries.ITEM.getKey(item);
 
             Model baseModel = context.modelProvider().model(Key.key(itemLocation.getNamespace(), "item/" + itemLocation.getPath()));
             if (baseModel == null) {
@@ -139,7 +138,7 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
 
         PackLogListener packLogListener = new PackLogListener(context.logger());
         for (Item item : items) {
-            ResourceLocation itemLocation = BuiltInRegistries.ITEM.getKey(item);
+            Identifier itemLocation = BuiltInRegistries.ITEM.getKey(item);
 
             Model baseModel = assets.model(Key.key(itemLocation.getNamespace(), "item/" + itemLocation.getPath()));
             if (baseModel == null) {
@@ -176,12 +175,12 @@ public class ItemPackModule extends TexturePackModule<ItemPackModule> {
 
         DefaultedRegistry<Item> registry = BuiltInRegistries.ITEM;
         for (Item item : items) {
-            ResourceLocation itemLocation = registry.getKey(item);
+            Identifier itemLocation = registry.getKey(item);
 
             try {
                 NonVanillaCustomItemDefinition.Builder customItemDefinition = NonVanillaCustomItemDefinition.builder(
-                        Identifier.of(itemLocation.toString()),
-                        Identifier.of(itemLocation.toString()),
+                        org.geysermc.geyser.api.util.Identifier.of(itemLocation.toString()),
+                        org.geysermc.geyser.api.util.Identifier.of(itemLocation.toString()),
                         registry.getId(item)
                 )
                         .displayName("%" + item.getDescriptionId());

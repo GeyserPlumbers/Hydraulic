@@ -6,7 +6,7 @@ import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -124,7 +124,7 @@ public class BlockPackModule extends PackModule<BlockPackModule> {
         List<Block> blocks = context.registryValues(BuiltInRegistries.BLOCK);
         DefaultedRegistry<Block> registry = BuiltInRegistries.BLOCK;
         for (Block block : blocks) {
-            ResourceLocation blockLocation = registry.getKey(block);
+            Identifier blockLocation = registry.getKey(block);
             for (BlockState state : block.getStateDefinition().getPossibleStates()) {
                 ModelDefinition definition = getModel(context, blockLocation, state);
                 if (definition == null) {
@@ -187,7 +187,7 @@ public class BlockPackModule extends PackModule<BlockPackModule> {
 
         DefaultedRegistry<Block> registry = BuiltInRegistries.BLOCK;
         for (Block block : blocks) {
-            ResourceLocation blockLocation = registry.getKey(block);
+            Identifier blockLocation = registry.getKey(block);
             CustomBlockData.Builder builder = NonVanillaCustomBlockData.builder()
                     .name(blockLocation.getPath())
                     .namespace(blockLocation.getNamespace())
@@ -435,7 +435,7 @@ public class BlockPackModule extends PackModule<BlockPackModule> {
     }
 
     @Nullable
-    private ModelDefinition getModel(@NotNull PackContext<?> context, @NotNull ResourceLocation blockLocation, @NotNull BlockState state) {
+    private ModelDefinition getModel(@NotNull PackContext<?> context, @NotNull Identifier blockLocation, @NotNull BlockState state) {
         StateDefinition definition = this.blockStates.get(blockLocation.toString());
         if (definition == null) {
             context.logger().warn("Missing blockstate for block {}", blockLocation);

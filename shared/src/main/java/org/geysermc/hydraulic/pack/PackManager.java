@@ -7,7 +7,7 @@ import com.google.common.collect.MultimapBuilder;
 import com.mojang.logging.LogUtils;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import org.geysermc.event.Event;
 import org.geysermc.geyser.api.GeyserApi;
@@ -72,8 +72,8 @@ public class PackManager {
     private final List<PackModule<?>> modules = new ArrayList<>();
 
     private final ListMultimap<String, ModInfo> namespacesToMods = MultimapBuilder.hashKeys().arrayListValues(1).build();
-    private final ListMultimap<String, ResourceLocation> modsToBlocks = MultimapBuilder.hashKeys().arrayListValues().build();
-    private final ListMultimap<String, ResourceLocation> modsToItems = MultimapBuilder.hashKeys().arrayListValues().build();
+    private final ListMultimap<String, Identifier> modsToBlocks = MultimapBuilder.hashKeys().arrayListValues().build();
+    private final ListMultimap<String, Identifier> modsToItems = MultimapBuilder.hashKeys().arrayListValues().build();
 
     private List<ConverterPipeline<?, ?>> packConverters;
     private ModelStitcher.Provider modelProvider;
@@ -238,9 +238,9 @@ public class PackManager {
         }
 
         // Step 2: Use namespace information to lookup which mods contains what block models
-        final Multimap<String, ResourceLocation> modsToBlocks = this.modsToBlocks;
+        final Multimap<String, Identifier> modsToBlocks = this.modsToBlocks;
         modsToBlocks.clear();
-        for (final ResourceLocation block : BuiltInRegistries.BLOCK.keySet()) {
+        for (final Identifier block : BuiltInRegistries.BLOCK.keySet()) {
             if (block.getNamespace().equals("minecraft")) continue;
             for (final ModInfo mod : namespacesToMods.get(block.getNamespace())) {
                 final Path checkFile = mod.resolveFile("assets/" + block.getNamespace() + "/blockstates/" + block.getPath() + ".json");
@@ -255,13 +255,13 @@ public class PackManager {
 
         // Step 3: Use namespace information to lookup which mods contains what item models
         // There's no ordering requirement between this and Step 2.
-        final Multimap<String, ResourceLocation> modsToItems = this.modsToItems;
+        final Multimap<String, Identifier> modsToItems = this.modsToItems;
         modsToItems.clear();
-        for (final ResourceLocation itemId : BuiltInRegistries.ITEM.keySet()) {
+        for (final Identifier itemId : BuiltInRegistries.ITEM.keySet()) {
             if (itemId.getNamespace().equals("minecraft")) continue;
 
             Item item = BuiltInRegistries.ITEM.getValue(itemId);
-            ResourceLocation itemModel = item.components().get(DataComponents.ITEM_MODEL);
+            Identifier itemModel = item.components().get(DataComponents.ITEM_MODEL);
             // Item model is missing, can't do much here
             if (itemModel == null) {
                 LOGGER.warn("Failed to find item model component for item {}, skipping", item);
@@ -317,11 +317,11 @@ public class PackManager {
         return namespacesToMods;
     }
 
-    public ListMultimap<String, ResourceLocation> getModsToBlocks() {
+    public ListMultimap<String, Identifier> getModsToBlocks() {
         return modsToBlocks;
     }
 
-    public ListMultimap<String, ResourceLocation> getModsToItems() {
+    public ListMultimap<String, Identifier> getModsToItems() {
         return modsToItems;
     }
 

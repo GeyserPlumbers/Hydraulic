@@ -7,7 +7,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -83,9 +83,9 @@ public class ArmorPackModule extends PackModule<ArmorPackModule> {
                 }
             }
 
-            ResourceLocation armorItemLocation = BuiltInRegistries.ITEM.getKey(armorItem);
+            Identifier armorItemLocation = BuiltInRegistries.ITEM.getKey(armorItem);
 
-            ResourceLocation armorTextureLocation = equippable.assetId().map(ResourceKey::location).orElseThrow(); // Checked above to ensure all armor processed has an asset id, so this shouldn't throw (This instead of get to prevent yellow lines)
+            Identifier armorTextureLocation = equippable.assetId().map(ResourceKey::identifier).orElseThrow(); // Checked above to ensure all armor processed has an asset id, so this shouldn't throw (This instead of get to prevent yellow lines)
 
             Equipment equipment = context.javaResourcePack().equipment(Key.key(armorTextureLocation.toString()));
             if (equipment == null) {

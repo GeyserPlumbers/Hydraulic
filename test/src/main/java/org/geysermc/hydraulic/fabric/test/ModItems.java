@@ -8,7 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -74,7 +74,7 @@ public class ModItems {
     );
 
     public static final ResourceKey<EquipmentAsset> BARREL_ARMOR_MATERIAL_KEY = ResourceKey.create(
-            EquipmentAssets.ROOT_ID, ResourceLocation.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, "barrel")
+            EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, "barrel")
     );
     public static final ArmorMaterial BARREL_ARMOR_MATERIAL = new ArmorMaterial(
             15,
@@ -159,11 +159,11 @@ public class ModItems {
                                     )
                             ))
                     ))
-                    .component(DataComponents.USE_COOLDOWN, new UseCooldown(999999f, Optional.of(ResourceLocation.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, "irauri_says_fly"))))
+                    .component(DataComponents.USE_COOLDOWN, new UseCooldown(999999f, Optional.of(Identifier.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, "irauri_says_fly"))))
     );
 
     public static Item register(String name, Function<Item.Properties, Item> itemFactory, Item.Properties properties) {
-        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, name));
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(HydraulicTestMod.MOD_ID, name));
         Item item = itemFactory.apply(properties.setId(itemKey));
         Registry.register(BuiltInRegistries.ITEM, itemKey, item);
 

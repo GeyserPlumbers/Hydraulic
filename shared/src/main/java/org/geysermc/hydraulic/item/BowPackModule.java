@@ -4,7 +4,7 @@ import com.google.auto.service.AutoService;
 import net.kyori.adventure.key.Key;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.BowItem;
 import org.geysermc.hydraulic.pack.PackModule;
 import org.geysermc.hydraulic.pack.TexturePackModule;
@@ -80,7 +80,7 @@ public class BowPackModule extends TexturePackModule<BowPackModule> {
         context.logger().info("Bows to convert: " + bowItems.size() + " in mod " + context.mod().id());
 
         for (BowItem bowItem : bowItems) {
-            ResourceLocation bowLocation = BuiltInRegistries.ITEM.getKey(bowItem);
+            Identifier bowLocation = BuiltInRegistries.ITEM.getKey(bowItem);
             Map<String, String> textures = new HashMap<>() {
                 {
                     put("enchanted", "textures/misc/enchanted_item_glint");
